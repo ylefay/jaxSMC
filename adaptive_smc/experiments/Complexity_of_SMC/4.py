@@ -22,10 +22,10 @@ The saved output is the weights.
 """
 
 from adaptive_smc.SMC import GenericWasteFreeTemperingSMC
-from adaptive_smc.experiments_bis.paper_complexity.heavy_tail_increment_weights_gaussians import make_model
-from adaptive_smc.experiments_bis.paper_complexity.proposal import \
+from adaptive_smc.experiments.Complexity_of_SMC.heavy_tail_increment_weights_gaussians import make_model
+from adaptive_smc.experiments.Complexity_of_SMC.proposal import \
     build_gaussian_rw_proposal_fixed_scaling
-from adaptive_smc.experiments_bis.paper_complexity.save import save
+from adaptive_smc.experiments.Complexity_of_SMC.save import save
 
 import os
 from datetime import datetime

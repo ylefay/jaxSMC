@@ -1,8 +1,9 @@
 from adaptive_smc.SMC import GenericGreedyWasteFreeTemperingSMC
-from adaptive_smc.experiments_bis.paper_complexity.heavy_tail_increment_weights_gaussians import make_model_bimodal_cov as make_model
-from adaptive_smc.experiments_bis.paper_complexity.proposal import \
+from adaptive_smc.experiments.Complexity_of_SMC.heavy_tail_increment_weights_gaussians import make_model_bimodal_cov, \
+    make_model_gaussian_anisotropic
+from adaptive_smc.experiments.Complexity_of_SMC.proposal import \
     build_gaussian_rw_proposal_fixed_scaling
-from adaptive_smc.experiments_bis.paper_complexity.save import save
+from adaptive_smc.experiments.Complexity_of_SMC.save import save
 
 import os
 from datetime import datetime
@@ -57,6 +58,8 @@ def xp(config, keys):
     tempering_sequence = jnp.concat([jnp.linspace(0+1/(tempering_length-1), 1, tempering_length-1), jnp.ones((1, ))])
 
     # Generate model
+    make_model = {"bimodal": make_model_bimodal_cov,
+                  "gaussian_anisotropic": make_model_gaussian_anisotropic}[config.get("model", "bimodal")]
     model_key = jax.random.PRNGKey(0)
     loglikelihood_fn, base_measure_sampler, logbase_density_fn, true_log_Z, cov, mean = make_model(dim,
                                                                                         config.get('heavy_factor', 1.0),

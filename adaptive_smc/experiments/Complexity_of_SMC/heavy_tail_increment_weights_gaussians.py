@@ -246,7 +246,7 @@ def make_model_bimodal_simple(dim: int, heavy_factor: None, key, mean=None):
 def make_model_bimodal_cov(dim: int, heavy_factor: None, key, mean=None):
     """
     Multidimensional bimodal Gaussian mixture:
-        0.5 N(-2 * 1_d, I) + 0.5 N(2 * 1_d, I)
+        0.5 N(-2 * 1_d, I) + 0.5 N(3 * 1_d, I)
 
     Base: standard Gaussian N(0, I)
     """
@@ -289,4 +289,43 @@ def make_model_bimodal_cov(dim: int, heavy_factor: None, key, mean=None):
         None,
         None,
         jnp.zeros((dim,)),
+    )
+
+
+def make_model_gaussian_anisotropic(dim: int, heavy_factor: float, key, mean=None):
+    """
+    Unimodal anisotropic Gaussian target:
+        N(mean * 1_d, diag(geomspace(1, 1 / heavy_factor, dim)))
+
+    Base: standard Gaussian N(0, I)
+    """
+    if mean is None:
+        mean = jnp.zeros((dim,))
+    elif isinstance(mean, float):
+        mean = jnp.ones((dim,)) * mean
+
+    cov = jnp.diag(jnp.geomspace(1., 1. / heavy_factor, dim))
+
+    # -----------------------
+    # Base: standard Gaussian
+    # -----------------------
+    def base_measure_sampler(key):
+        return jax.random.multivariate_normal(key, jnp.zeros(dim), jnp.eye(dim))
+
+    def logbase_density_fn(x):
+        return jsp.stats.multivariate_normal.logpdf(x, jnp.zeros(dim), jnp.eye(dim))
+
+    # -----------------------
+    # Target: anisotropic Gaussian (normalised, so log Z = 0)
+    # -----------------------
+    def loglikelihood_fn(x):
+        return jsp.stats.multivariate_normal.logpdf(x, mean, cov)
+
+    return (
+        lambda x: loglikelihood_fn(x) - logbase_density_fn(x),
+        base_measure_sampler,
+        logbase_density_fn,
+        0.,
+        cov,
+        mean,
     )
