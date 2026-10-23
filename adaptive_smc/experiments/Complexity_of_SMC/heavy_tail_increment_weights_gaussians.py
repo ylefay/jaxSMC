@@ -295,14 +295,14 @@ def make_model_bimodal_cov(dim: int, heavy_factor: None, key, mean=None):
 def make_model_gaussian_anisotropic(dim: int, heavy_factor: float, key, mean=None):
     """
     Unimodal anisotropic Gaussian target:
-        N(mean * 1_d, diag(geomspace(1, 1 / heavy_factor, dim)))
+        N(mean * e_1, diag(geomspace(1, 1 / heavy_factor, dim)))
 
     Base: standard Gaussian N(0, I)
     """
     if mean is None:
         mean = jnp.zeros((dim,))
     elif isinstance(mean, float):
-        mean = jnp.ones((dim,)) * mean
+        mean = jnp.zeros((dim,)).at[0].set(mean)
 
     cov = jnp.diag(jnp.geomspace(1., 1. / heavy_factor, dim))
 

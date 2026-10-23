@@ -25,7 +25,7 @@ ground_truth_config4_bimodal:
 config4_gaussian_anisotropic:
   run: Yes
   model: "gaussian_anisotropic"
-  heavy_factor: 10.
+  heavy_factor: 1000.
   mean: 3.
   sequential_repetitions: 4
   parallel_repetitions: 10000
