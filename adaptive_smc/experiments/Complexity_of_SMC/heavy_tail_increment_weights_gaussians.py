@@ -329,3 +329,48 @@ def make_model_gaussian_anisotropic(dim: int, heavy_factor: float, key, mean=Non
         cov,
         mean,
     )
+
+
+def make_model_student(dim: int, heavy_factor: float, key, mean=None, base_df=10.):
+    """
+    Unimodal Student-t target with heavier tails than the base:
+        t_{heavy_factor}(mean * e_1, I)
+
+    Base: Student-t t_{base_df}(0, I), with base_df > heavy_factor.
+    """
+    if mean is None:
+        mean = jnp.zeros((dim,))
+    elif isinstance(mean, float):
+        mean = jnp.zeros((dim,)).at[0].set(mean)
+
+    def logpdf_t(x, loc, df):
+        return (jsp.special.gammaln((df + dim) / 2) - jsp.special.gammaln(df / 2)
+                - 0.5 * dim * jnp.log(df * jnp.pi)
+                - 0.5 * (df + dim) * jnp.log1p(jnp.sum((x - loc) ** 2) / df))
+
+    # -----------------------
+    # Base: Student-t
+    # -----------------------
+    def base_measure_sampler(key):
+        key_z, key_g = jax.random.split(key)
+        z = jax.random.normal(key_z, shape=(dim,))
+        g = 2. * jax.random.gamma(key_g, base_df / 2)
+        return z / jnp.sqrt(g / base_df)
+
+    def logbase_density_fn(x):
+        return logpdf_t(x, jnp.zeros((dim,)), base_df)
+
+    # -----------------------
+    # Target: Student-t (normalised, so log Z = 0)
+    # -----------------------
+    def loglikelihood_fn(x):
+        return logpdf_t(x, mean, heavy_factor)
+
+    return (
+        lambda x: loglikelihood_fn(x) - logbase_density_fn(x),
+        base_measure_sampler,
+        logbase_density_fn,
+        0.,
+        None,
+        mean,
+    )
