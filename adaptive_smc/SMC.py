@@ -450,7 +450,7 @@ class GenericAdaptiveWasteFreeTemperingSMC:
             new_proposed_particles = new_couple_particles.at[..., 1, :].get()
             particles = particles.at[i].set(new_particles)
             proposed_particles = proposed_particles.at[i].set(new_proposed_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -871,7 +871,7 @@ class GenericAdaptiveWasteFreeTemperingSMC:
             new_proposed_particles = new_couple_particles.at[..., 1, :].get()
             particles = particles.at[1].set(new_particles)
             proposed_particles = proposed_particles.at[1].set(new_proposed_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -1134,7 +1134,7 @@ class GenericWasteFreeTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[i].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -1302,7 +1302,7 @@ class GenericWasteFreeTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[0].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -1509,7 +1509,7 @@ class GenericTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[i].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -1677,7 +1677,7 @@ class GenericTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[0].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
             new_log_weights, log_normalization = normalize_log_weights(new_log_weights)
             log_normalizations = log_normalizations.at[i].set(log_normalization)
@@ -1758,6 +1758,8 @@ class GenericGreedyWasteFreeTemperingSMC:
 
         """
         iteration = len(tempering_sequence)
+        assert num_mcmc_steps_schedule.shape[0] == iteration + 1, \
+            "num_mcmc_steps_schedule must have len(tempering_sequence) + 1 entries (base draws, then one per MCMC stage)"
         diff_tempering_sequence = jnp.diff(tempering_sequence)
         diff_tempering_sequence = jnp.insert(diff_tempering_sequence, 0, tempering_sequence.at[0].get())
 
@@ -1901,7 +1903,7 @@ class GenericGreedyWasteFreeTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[i].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
 
             mask = p_idx <= num_mcmc_steps_schedule[i]
@@ -1947,6 +1949,8 @@ class GenericGreedyWasteFreeTemperingSMC:
 
         """
         iteration = len(tempering_sequence)
+        assert num_mcmc_steps_schedule.shape[0] == iteration + 1, \
+            "num_mcmc_steps_schedule must have len(tempering_sequence) + 1 entries (base draws, then one per MCMC stage)"
         diff_tempering_sequence = jnp.diff(tempering_sequence)
         diff_tempering_sequence = jnp.insert(diff_tempering_sequence, 0, tempering_sequence.at[0].get())
 
@@ -2091,7 +2095,7 @@ class GenericGreedyWasteFreeTemperingSMC:
             # Running the inner loop for iteration t
             new_particles = inside_body_fn(keys, resampled_particles)
             particles = particles.at[0].set(new_particles)
-            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get())
+            log_Gi_fn = self.vmapped_log_weights_fn(diff_tempering_sequence.at[i].get(mode='fill', fill_value=0.))
             new_log_weights = log_Gi_fn(new_particles)
 
             mask = p_idx <= num_mcmc_steps_schedule[i]

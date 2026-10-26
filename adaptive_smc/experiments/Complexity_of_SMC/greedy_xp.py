@@ -52,11 +52,11 @@ def xp(config, keys):
     print(f"P_t, t<T:{budget_per_it_before_last_it_int}")
     
     print(budget_per_it_before_last_it_int*(tempering_length-1) + budget_last_it_int)
-    num_mcmc_steps_schedule = jnp.zeros((tempering_length,), dtype=int)
+    num_mcmc_steps_schedule = jnp.zeros((tempering_length + 1,), dtype=int)
     num_mcmc_steps_schedule = num_mcmc_steps_schedule.at[:-1].set(int(budget_per_it_before_last_it))
     num_mcmc_steps_schedule = num_mcmc_steps_schedule.at[-1].set(budget_last_it)
 
-    tempering_sequence = jnp.concat([jnp.linspace(0+1/(tempering_length-1), 1, tempering_length-1), jnp.ones((1, ))])
+    tempering_sequence = jnp.linspace(1 / tempering_length, 1, tempering_length)
 
     # Generate model
     make_model = {"bimodal": make_model_bimodal_cov,
