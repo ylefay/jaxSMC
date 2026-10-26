@@ -1,0 +1,19 @@
+config4: # Light-tailed distribution
+  run: Yes
+  sequential_repetitions: 50
+  parallel_repetitions: 4
+  dim_list: [1, 5, 10, 20, 50]
+  num_mcmc_steps: 200
+  heavy_factor: 0.5
+  OUTPUT_PATH: "./power2P1/heavyfactor05/"
+  prefix: "_"
+
+config5: # Heavy-tailed distribution
+  run: Yes
+  sequential_repetitions: 50
+  parallel_repetitions: 4
+  dim_list: [1, 5, 10, 20, 50]
+  num_mcmc_steps: 200
+  heavy_factor: 4.0
+  OUTPUT_PATH: "./power2P1/heavyfactor4/"
+  prefix: "_"

@@ -360,7 +360,7 @@ class GenericAdaptiveWasteFreeTemperingSMC:
                     particle = couple_particle.at[0].get()
                     proposed_particle = couple_particle.at[1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
                     _, key = jax.random.split(key)
 
                     # The target density at the current particle is carried over from the
@@ -782,7 +782,7 @@ class GenericAdaptiveWasteFreeTemperingSMC:
                     particle = couple_particle.at[0].get()
                     proposed_particle = couple_particle.at[1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
                     _, key = jax.random.split(key)
 
                     # The target density at the current particle is carried over from the
@@ -1066,7 +1066,7 @@ class GenericWasteFreeTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[p - 1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
@@ -1234,7 +1234,7 @@ class GenericWasteFreeTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[p - 1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
@@ -1441,7 +1441,7 @@ class GenericTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[0].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
@@ -1609,7 +1609,7 @@ class GenericTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[0].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
@@ -1828,7 +1828,7 @@ class GenericGreedyWasteFreeTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[p - 1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
@@ -2020,7 +2020,7 @@ class GenericGreedyWasteFreeTemperingSMC:
                     key, particles_across_p, log_density_particle = carry
                     particle = particles_across_p.at[p - 1].get()
 
-                    subkey_p = jax.random.fold_in(key, p)
+                    subkey_p = jax.random.fold_in(key, p + 1)  # not p: fold_in(key, 1) == split(key)[1], the MH accept key
 
                     proposed_particle = proposal_sampler(subkey_p, particle)
                     _, key = jax.random.split(key)
