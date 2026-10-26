@@ -38,7 +38,7 @@ config4_gaussian_anisotropic:
   prefix: "_"
 
 config4_student:
-  run: Yes
+  run: No
   model: "student"
   heavy_factor: 3.
   mean: 3.
@@ -50,4 +50,20 @@ config4_student:
   num_mcmc_steps: 100
   key: 0
   OUTPUT_PATH: "./dim2_20_student/"
+  prefix: "_"
+
+config4_gaussian_small_rw:
+  run: Yes
+  model: "gaussian_anisotropic"
+  heavy_factor: 1.
+  mean: 3.
+  rw_scale: 0.07
+  sequential_repetitions: 4
+  parallel_repetitions: 1000
+  dim_list: [ 2 ]
+  factor_list: [1., 1.1, 1.2, 1.3, 1.4, 1.5, 1.6, 1.7, 1.8, 1.9, 2.0, 2.1, 2.2, 2.3, 2.4, 2.5, 2.6, 2.7, 2.8, 2.9, 3., 3.1, 3.2, 3.3, 3.4, 3.5, 3.6, 3.7, 3.75, 3.8, 3.85, 3.9, 3.95, 4.]
+  num_parallel_chain: 20
+  num_mcmc_steps: 100
+  key: 0
+  OUTPUT_PATH: "./dim2_20_gaussian_small_rw/"
   prefix: "_"

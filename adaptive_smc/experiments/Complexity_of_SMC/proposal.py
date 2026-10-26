@@ -5,10 +5,10 @@ import jax
 
 
 def build_gaussian_rw_proposal_fixed_scaling(state: SMCStatebis, _: LogDensity, __: LogDensity, i: int,
-                                             j: Optional[int] = None):
+                                             j: Optional[int] = None, scale: Optional[float] = None):
     particles = state.particles
     dim = particles.shape[-1]
-    optimal_scale = 2.38 / jnp.sqrt(dim)
+    optimal_scale = scale or 2.38 / jnp.sqrt(dim)
 
     def gaussian_rwmh_cov_log_proposal(x, y):  # No need to implement it, it is symmetric.
         return 0.

@@ -5,6 +5,7 @@ from adaptive_smc.experiments.Complexity_of_SMC.proposal import \
     build_gaussian_rw_proposal_fixed_scaling
 from adaptive_smc.experiments.Complexity_of_SMC.save import save
 
+import functools
 import os
 from datetime import datetime
 import jax
@@ -81,7 +82,7 @@ def xp(config, keys):
         logbase_density_fn,
         base_measure_sampler,
         loglikelihood_fn,
-        build_gaussian_rw_proposal_fixed_scaling
+        functools.partial(build_gaussian_rw_proposal_fixed_scaling, scale=config.get("rw_scale"))
     )
 
     num_mcmc_steps = int(jnp.max(num_mcmc_steps_schedule))
