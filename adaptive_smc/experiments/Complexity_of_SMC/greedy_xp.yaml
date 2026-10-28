@@ -57,7 +57,7 @@ config4_gaussian_small_rw:
   model: "gaussian_anisotropic"
   heavy_factor: 1.
   mean: 3.
-  rw_scale: 0.07
+  rw_scale: 0.2
   sequential_repetitions: 4
   parallel_repetitions: 1000
   dim_list: [ 2 ]
